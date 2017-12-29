@@ -3,25 +3,40 @@
 
 EAPI=6
 
-DESCRIPTION="Helper library for gathering system configuration"
-HOMEPAGE="https://github.com/janestreet/configurator"
+DESCRIPTION="System-independent part of Core"
+HOMEPAGE="https://github.com/janestreet/core_kernel"
 SRC_URI="https://github.com/janestreet/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
-LICENSE="Apache-2.0"
+LICENSE="LGPL-2.1-with-linking-exception"
 SLOT="0/${PV}"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND="
+RDEPEND="
 	dev-lang/ocaml:=
 	dev-ml/base:=
+	dev-ml/bin-prot:=
+	dev-ml/configurator:=
+	dev-ml/fieldslib:=
+	dev-ml/jane-street-headers:=
+	dev-ml/ppx_assert:=
 	dev-ml/ppx_base:=
 	dev-ml/ppx_driver:=
+	dev-ml/ppx_hash:=
+	dev-ml/ppx_inline_test:=
+	dev-ml/ppx_jane:=
+	dev-ml/ppx_sexp_conv:=
+	dev-ml/ppx_sexp_message:=
+	dev-ml/sexplib:=
 	dev-ml/stdio:=
+	dev-ml/typerep:=
+	dev-ml/variantslib:=
 	dev-ml/ocaml-migrate-parsetree:=
-	"
-RDEPEND="${DEPEND}"
-DEPEND="${DEPEND} dev-ml/opam dev-ml/jbuilder"
+"
+DEPEND="${RDEPEND}
+	dev-ml/opam
+	dev-ml/jbuilder
+"
 
 src_install() {
 	opam-installer -i \

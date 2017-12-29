@@ -5,7 +5,7 @@
 dev-lang/mlton:binary - install a binary version (need to do this once to bootstrap, until smlnj is supported)
 dev-lang/ocaml:flambda - Enables the Flambda optimizer: A new intermediate representation (introduced in ocaml 4.03) in the depths of the compiler designed to allow for better inlining.
 dev-lang/ocaml:spacetime - Enables the Spacetime memory profiler. See https://caml.inria.fr/pub/docs/manual-ocaml/spacetime.html for more information.
-dev-lang/polyml:portable - Build the portable interpreter version of Poly/ML instead of native.
+dev-lang/polyml:portable - Build the portable interpreter version of Poly/ML instead of native
 dev-ml/cairo-ocaml:pango - Enable support for x11-libs/pango
 dev-ml/csv:lwt - Enables the Lwt-based library for asynchronous operations.
 dev-ml/dose3:parmap - Adds multi-core CPU support via dev-ml/parmap.

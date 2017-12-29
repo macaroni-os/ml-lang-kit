@@ -8,14 +8,12 @@ EAPI=6
 CMAKE_MIN_VERSION=3.7.0-r1
 PYTHON_COMPAT=( python2_7 )
 
-inherit cmake-utils git-r3 llvm python-any-r1
+inherit cmake-utils llvm python-any-r1
 
+MY_P=llvm-${PV/_/}.src
 DESCRIPTION="OCaml bindings for LLVM"
 HOMEPAGE="https://llvm.org/"
-SRC_URI=""
-EGIT_REPO_URI="https://git.llvm.org/git/llvm.git
-	https://github.com/llvm-mirror/llvm.git"
-EGIT_BRANCH="release_50"
+SRC_URI="https://releases.llvm.org/${PV/_//}/${MY_P}.tar.xz"
 
 # Keep in sync with sys-devel/llvm
 ALL_LLVM_TARGETS=( AArch64 AMDGPU ARM BPF Hexagon Lanai Mips MSP430
@@ -25,7 +23,7 @@ LLVM_TARGET_USEDEPS=${ALL_LLVM_TARGETS[@]/%/?}
 
 LICENSE="UoI-NCSA"
 SLOT="0/${PV}"
-KEYWORDS=""
+KEYWORDS="~amd64 ~arm ~x86"
 IUSE="debug test ${ALL_LLVM_TARGETS[*]}"
 
 RDEPEND="
@@ -37,21 +35,17 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	dev-lang/perl
 	dev-ml/findlib
-	test? ( dev-ml/ounit
-		$(python_gen_any_dep "~dev-python/lit-${PV}[\${PYTHON_USEDEP}]") )
+	test? ( dev-ml/ounit )
 	!!<dev-python/configparser-3.3.0.2
 	${PYTHON_DEPS}"
 
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	|| ( ${ALL_LLVM_TARGETS[*]} )"
 
+S=${WORKDIR}/${MY_P}
+
 # least intrusive of all
 CMAKE_BUILD_TYPE=RelWithDebInfo
-
-python_check_deps() {
-	! use test \
-		|| has_version "dev-python/lit[${PYTHON_USEDEP}]"
-}
 
 pkg_setup() {
 	LLVM_MAX_SLOT=${PV%%.*} llvm_pkg_setup
@@ -62,8 +56,7 @@ src_prepare() {
 	# Python is needed to run tests using lit
 	python_setup
 
-	# User patches
-	eapply_user
+	cmake-utils_src_prepare
 }
 
 src_configure() {
@@ -91,10 +84,6 @@ src_configure() {
 		-DGO_EXECUTABLE=GO_EXECUTABLE-NOTFOUND
 
 		# TODO: ocamldoc
-	)
-
-	use test && mycmakeargs+=(
-		-DLIT_COMMAND="${EPREFIX}/usr/bin/lit"
 	)
 
 	# LLVM_ENABLE_ASSERTIONS=NO does not guarantee this for us, #614844
